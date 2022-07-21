@@ -1,6 +1,4 @@
-import { Component } from 'react';
-
-const imageItem = ({ webformatURL, id, largeImageURL, tags }) => {
+const imageItem = ({ webformatURL, id, largeImageURL }) => {
   return (
     <li className="ImageGalleryItem" key={id}>
       <img
