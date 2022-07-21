@@ -1,5 +1,4 @@
 import { Component } from 'react';
-import { render } from 'react-dom';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 export default class Searchbar extends Component {
