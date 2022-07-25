@@ -6,7 +6,7 @@ class loaderBtn extends Component {
       <button
         className="Button"
         type="button"
-        style={{ visibility: this.props.info }}
+        // style={{ visibility: this.props.info }}
         onClick={() => {
           this.props.addPage(1);
         }}

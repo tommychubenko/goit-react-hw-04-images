@@ -17,6 +17,7 @@ export class App extends Component {
     return (
       <div>
         <Searchbar onSubmit={this.getSearchterm} />
+
         <ImageGallery searchterm={this.state.searchterm} />
       </div>
     );

@@ -19,7 +19,10 @@ class modal extends Component {
 
   render() {
     return (
-      <div className="Overlay" style={{ visibility: this.props.visibility }}>
+      <div
+        className="Overlay"
+        // style={{ visibility: this.props.visibility }}
+      >
         <div className="Modal">
           <img src={this.props.bigImage} alt="" />
         </div>

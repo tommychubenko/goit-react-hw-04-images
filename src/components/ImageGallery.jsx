@@ -15,10 +15,11 @@ class ImageGallery extends Component {
     perPage: 30,
     images: [],
     error: null,
-    btnVisible: 'hidden',
+    btn: false,
+    modal: false,
     status: 'idle',
     selectedImg: '',
-    modalVisibility: 'hidden',
+
     // 'idle' 'pending' 'resolve' 'rejected'
   };
 
@@ -40,15 +41,25 @@ class ImageGallery extends Component {
     console.log(data);
   };
 
-  // componentDidMount() {
+  toggleBtn = () => {
+    this.setState(prevState => ({ btn: !prevState.btn }));
+  };
 
-  // }
+  openModal = e => {
+    this.setState({ selectedImg: e.target.dataset.source });
+    this.setState({ modal: true });
+  };
+  closeModal = e => {
+    this.setState({ selectedImg: '' });
+    this.setState({ modal: false });
+  };
 
   async componentDidUpdate(prevProps, prevState) {
     if (prevProps.searchterm !== this.props.searchterm) {
       try {
         this.setState({ status: 'pending' });
-        this.setState({ btnVisible: 'hidden' });
+        this.setState({ btn: false });
+        this.setState({ modal: false });
         this.setState({ page: 1 });
         const r = await this.fetchImg(this.props.searchterm);
         console.log(r);
@@ -62,7 +73,7 @@ class ImageGallery extends Component {
         this.setState({ status: 'resolve' });
         this.setState({ images: r.data.hits });
         if (r.data.totalHits > r.data.hits.length) {
-          this.setState({ btnVisible: 'visible' });
+          this.toggleBtn();
         }
       } catch (error) {
         this.setState({ error, status: 'rejected' });
@@ -83,7 +94,7 @@ class ImageGallery extends Component {
         );
 
         if (this.state.images.length + this.state.perPage > r.data.totalHits) {
-          this.setState({ btnVisible: 'hidden' });
+          this.toggleBtn();
         }
       } catch (error) {
         Notify.failure(`No more images or error ${error}`);
@@ -91,17 +102,8 @@ class ImageGallery extends Component {
     }
   }
 
-  openModal = e => {
-    this.setState({ selectedImg: e.target.dataset.source });
-    this.setState({ modalVisibility: 'visible' });
-  };
-  closeModal = e => {
-    this.setState({ selectedImg: '' });
-    this.setState({ modalVisibility: 'hidden' });
-  };
-
   render() {
-    const { status, error, btnVisible, images } = this.state;
+    const { status, error, images, btn, modal } = this.state;
 
     if (status === 'idle') {
       return;
@@ -130,19 +132,19 @@ class ImageGallery extends Component {
             }
             if (e.target.classList.value === 'Overlay') {
               this.closeModal(e);
-
-              // this.setState({ selectedImg: '' });
-              // this.setState({ modalVisibility: 'hidden' });
             }
           }}
         >
           <ul className="ImageGallery">{this.renderImages(images)}</ul>
-          <LoaderBtn info={btnVisible} addPage={this.onClickLoadMore} />
-          <Modal
-            bigImage={this.state.selectedImg}
-            visibility={this.state.modalVisibility}
-            onClose={this.closeModal}
-          />
+
+          {btn && <LoaderBtn addPage={this.onClickLoadMore} />}
+
+          {modal && (
+            <Modal
+              bigImage={this.state.selectedImg}
+              onClose={this.closeModal}
+            />
+          )}
         </div>
       );
     }
