@@ -3,12 +3,9 @@ import { Component } from 'react';
 import LoaderBtn from './Button';
 import Loading from './Loadmore';
 import Modal from './Modal';
-import axios from 'axios';
+
 import fetchImg from '../Api/GetImages';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-
-const PIXA_KEY = '28226957-200d43869ee80bd5ab4812e4f';
-const URL = `https://pixabay.com/api/?key=${PIXA_KEY}`;
 
 class ImageGallery extends Component {
   state = {
@@ -23,16 +20,6 @@ class ImageGallery extends Component {
 
     // 'idle' 'pending' 'resolve' 'rejected'
   };
-
-  // fetchImg(whatToSearch) {
-  //   return axios.get(
-  //     `${URL}&q=${whatToSearch}&image_type=photo&safesearch=false&orientation=horizontal&per_page=${this.state.perPage}&page=${this.state.page}`
-  //   );
-  // }
-
-  // renderImages = images => {
-  //   return images.map(image => imageItem(image));
-  // };
 
   onClickLoadMore = number => {
     this.setState(prevState => ({ page: prevState.page + number }));
