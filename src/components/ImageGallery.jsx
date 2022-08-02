@@ -1,9 +1,10 @@
-import imageItem from './ImageGalleryItem';
+import ImageItem from './ImageGalleryItem';
 import { Component } from 'react';
 import LoaderBtn from './Button';
 import Loading from './Loadmore';
 import Modal from './Modal';
 import axios from 'axios';
+import fetchImg from '../Api/GetImages';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const PIXA_KEY = '28226957-200d43869ee80bd5ab4812e4f';
@@ -23,15 +24,15 @@ class ImageGallery extends Component {
     // 'idle' 'pending' 'resolve' 'rejected'
   };
 
-  fetchImg(whatToSearch) {
-    return axios.get(
-      `${URL}&q=${whatToSearch}&image_type=photo&safesearch=false&orientation=horizontal&per_page=${this.state.perPage}&page=${this.state.page}`
-    );
-  }
+  // fetchImg(whatToSearch) {
+  //   return axios.get(
+  //     `${URL}&q=${whatToSearch}&image_type=photo&safesearch=false&orientation=horizontal&per_page=${this.state.perPage}&page=${this.state.page}`
+  //   );
+  // }
 
-  renderImages = images => {
-    return images.map(image => imageItem(image));
-  };
+  // renderImages = images => {
+  //   return images.map(image => imageItem(image));
+  // };
 
   onClickLoadMore = number => {
     this.setState(prevState => ({ page: prevState.page + number }));
@@ -45,24 +46,40 @@ class ImageGallery extends Component {
     this.setState(prevState => ({ btn: !prevState.btn }));
   };
 
-  openModal = e => {
-    this.setState({ selectedImg: e.target.dataset.source });
+  openModal = largeImageURL => {
+    this.setState({ selectedImg: largeImageURL });
     this.setState({ modal: true });
   };
   closeModal = e => {
+    if (e.target.classList.value === 'Overlay') {
+      this.setState({ selectedImg: '' });
+      this.setState({ modal: false });
+    }
+  };
+
+  closeModalByESC = e => {
     this.setState({ selectedImg: '' });
     this.setState({ modal: false });
   };
 
+  pendingStatus = () => {
+    this.setState({ status: 'pending' });
+    this.setState({ btn: false });
+    this.setState({ modal: false });
+    this.setState({ page: 1 });
+  };
+  resolveStatus = () => {};
+
   async componentDidUpdate(prevProps, prevState) {
     if (prevProps.searchterm !== this.props.searchterm) {
       try {
-        this.setState({ status: 'pending' });
-        this.setState({ btn: false });
-        this.setState({ modal: false });
-        this.setState({ page: 1 });
-        const r = await this.fetchImg(this.props.searchterm);
-        console.log(r);
+        this.pendingStatus();
+        const r = await fetchImg(
+          this.props.searchterm,
+          this.state.perPage,
+          this.state.page
+        );
+
         r.data.totalHits > 0
           ? Notify.success(
               `Horrey! Found ${r.data.totalHits} images of "${this.props.searchterm}" reqest!`
@@ -81,7 +98,11 @@ class ImageGallery extends Component {
     }
     if (prevState.page !== this.state.page) {
       try {
-        const r = await this.fetchImg(this.props.searchterm);
+        const r = await fetchImg(
+          this.props.searchterm,
+          this.state.perPage,
+          this.state.page
+        );
 
         this.setState(prevState => ({
           images: [...prevState.images, ...r.data.hits],
@@ -124,25 +145,18 @@ class ImageGallery extends Component {
           onChange={e => {
             console.log(e);
           }}
-          onClick={e => {
-            console.log(e);
-
-            if (e.target.classList.value === 'ImageGalleryItem-image') {
-              this.openModal(e);
-            }
-            if (e.target.classList.value === 'Overlay') {
-              this.closeModal(e);
-            }
-          }}
         >
-          <ul className="ImageGallery">{this.renderImages(images)}</ul>
+          <ul className="ImageGallery">
+            <ImageItem images={this.state.images} openModal={this.openModal} />
+          </ul>
 
           {btn && <LoaderBtn addPage={this.onClickLoadMore} />}
 
           {modal && (
             <Modal
               bigImage={this.state.selectedImg}
-              onClose={this.closeModal}
+              onClose={this.closeModalByESC}
+              closeModal={this.closeModal}
             />
           )}
         </div>
