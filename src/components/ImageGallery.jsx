@@ -3,8 +3,7 @@ import { Component } from 'react';
 import LoaderBtn from './Button';
 import Loading from './Loadmore';
 import Modal from './Modal';
-
-import fetchImg from '../Api/GetImages';
+import fetchImg from '../api/GetImages';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 class ImageGallery extends Component {
@@ -34,33 +33,30 @@ class ImageGallery extends Component {
   };
 
   openModal = largeImageURL => {
-    this.setState({ selectedImg: largeImageURL });
-    this.setState({ modal: true });
+    this.setState({ selectedImg: largeImageURL, modal: true });
+    // this.setState({ modal: true });
   };
   closeModal = e => {
     if (e.target.classList.value === 'Overlay') {
-      this.setState({ selectedImg: '' });
-      this.setState({ modal: false });
+      this.setState({ selectedImg: '', modal: false });
+      // this.setState({ modal: false });
     }
   };
 
   closeModalByESC = e => {
-    this.setState({ selectedImg: '' });
-    this.setState({ modal: false });
+    this.setState({ selectedImg: '', modal: false });
+    // this.setState({ modal: false });
   };
-
-  pendingStatus = () => {
-    this.setState({ status: 'pending' });
-    this.setState({ btn: false });
-    this.setState({ modal: false });
-    this.setState({ page: 1 });
-  };
-  resolveStatus = () => {};
 
   async componentDidUpdate(prevProps, prevState) {
     if (prevProps.searchterm !== this.props.searchterm) {
       try {
-        this.pendingStatus();
+        this.setState({
+          status: 'pending',
+          btn: false,
+          modal: false,
+          page: 1,
+        });
         const r = await fetchImg(
           this.props.searchterm,
           this.state.perPage,
@@ -74,8 +70,8 @@ class ImageGallery extends Component {
           : Notify.failure(
               `Ooops! We did not dound any images under receipt ${this.props.searchterm}`
             );
-        this.setState({ status: 'resolve' });
-        this.setState({ images: r.data.hits });
+        this.setState({ status: 'resolve', images: r.data.hits });
+        // this.setState({ images: r.data.hits });
         if (r.data.totalHits > r.data.hits.length) {
           this.toggleBtn();
         }
