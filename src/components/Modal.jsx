@@ -7,25 +7,8 @@ export const Modal = ({ closeModal, bigImage, onClose }) => {
         onClose();
       }
     });
-  }, []);
-  // class modal extends Component {
-  // componentDidMount() {
-  // window.addEventListener('keydown', e => {
-  //   if (e.code === 'Escape') {
-  //     this.props.onClose();
-  //   }
-  // });
-  // }
+  }, []); //react-hooks/exhaustive-deps
 
-  // componentWillUnmount() {
-  //   window.removeEventListener('keydown', e => {
-  //     if (e.code === 'Escape') {
-  //       this.props.onClose();
-  //     }
-  //   });
-  // }
-
-  // render() {
   return (
     <div className="Overlay" onClick={closeModal}>
       <div className="Modal">

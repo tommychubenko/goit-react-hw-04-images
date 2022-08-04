@@ -73,7 +73,7 @@ export const ImageGallery = ({ getSearchterm }) => {
       };
       getResults();
     }
-  }, [getSearchterm]);
+  }, [getSearchterm]); //react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (page !== 1) {
@@ -98,7 +98,7 @@ export const ImageGallery = ({ getSearchterm }) => {
 
       getResults();
     }
-  }, [page]);
+  }, [page]); //react-hooks/exhaustive-deps
 
   if (status === 'idle') {
     return;

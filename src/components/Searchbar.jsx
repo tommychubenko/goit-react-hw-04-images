@@ -3,7 +3,6 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 export const Searchbar = ({ onSubmit }) => {
   const [searchterm, setSearchterm] = useState('');
-  const [images, setImages] = useState('');
 
   // export default class Searchbar extends Component {
   //   state = {
@@ -12,7 +11,7 @@ export const Searchbar = ({ onSubmit }) => {
   //   };
 
   const onChange = e => {
-    const { name, value } = e.currentTarget;
+    const { value } = e.currentTarget;
     setSearchterm(value);
   };
 
