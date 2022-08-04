@@ -1,52 +1,56 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
-export default class Searchbar extends Component {
-  state = {
-    searchterm: '',
-    images: '',
-  };
+export const Searchbar = ({ onSubmit }) => {
+  const [searchterm, setSearchterm] = useState('');
+  const [images, setImages] = useState('');
 
-  onChange = e => {
+  // export default class Searchbar extends Component {
+  //   state = {
+  //     searchterm: '',
+  //     images: '',
+  //   };
+
+  const onChange = e => {
     const { name, value } = e.currentTarget;
-    this.setState({ [name]: value });
+    setSearchterm(value);
   };
 
-  onSumbit = e => {
+  const onSumbit = e => {
     e.preventDefault();
-    if (this.state.searchterm.trim() === '') {
+    if (searchterm.trim() === '') {
       Notify.failure('Введіть пошуковий запит');
       return;
     }
-    this.props.onSubmit(this.state.searchterm);
-    this.setState({ searchterm: '' });
+    onSubmit(searchterm);
+    setSearchterm('');
   };
 
-  render() {
-    return (
-      <header className="Searchbar">
-        <form
-          className="SearchForm"
-          onSubmit={e => {
-            this.onSumbit(e);
-          }}
-        >
-          <button type="submit" className="SearchForm-button">
-            <span className="button-label"></span>
-          </button>
+  // render() {
+  return (
+    <header className="Searchbar">
+      <form
+        className="SearchForm"
+        onSubmit={e => {
+          onSumbit(e);
+        }}
+      >
+        <button type="submit" className="SearchForm-button">
+          <span className="button-label"></span>
+        </button>
 
-          <input
-            className="SearchForm-input"
-            type="text"
-            name="searchterm"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            onChange={this.onChange}
-            value={this.state.searchterm}
-          />
-        </form>
-      </header>
-    );
-  }
-}
+        <input
+          className="SearchForm-input"
+          type="text"
+          name="searchterm"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          onChange={onChange}
+          value={searchterm}
+        />
+      </form>
+    </header>
+  );
+  // }
+};

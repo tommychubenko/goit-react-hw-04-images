@@ -1,25 +1,20 @@
-import { Component } from 'react';
-import Searchbar from './Searchbar';
-import ImageGallery from './ImageGallery';
+import { useState } from 'react';
+import { Searchbar } from './Searchbar';
+import { ImageGallery } from './ImageGallery';
 
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
-export class App extends Component {
-  state = {
-    searchterm: '',
+export const App = () => {
+  const [searchterm, setSearchterm] = useState('');
+
+  const getSearchterm = searchterm => {
+    setSearchterm(searchterm);
   };
 
-  getSearchterm = searchterm => {
-    this.setState({ searchterm });
-  };
-
-  render() {
-    return (
-      <div>
-        <Searchbar onSubmit={this.getSearchterm} />
-
-        <ImageGallery searchterm={this.state.searchterm} />
-      </div>
-    );
-  }
-}
+  return (
+    <div>
+      <Searchbar onSubmit={getSearchterm} />
+      <ImageGallery getSearchterm={searchterm} />
+    </div>
+  );
+};

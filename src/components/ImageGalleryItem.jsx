@@ -9,7 +9,6 @@ const imageItem = ({ images, openModal }) => {
           alt={id}
           id={id}
           className="ImageGalleryItem-image"
-          // data-source={largeImageURL}
           onClick={() => {
             openModal(largeImageURL);
           }}
