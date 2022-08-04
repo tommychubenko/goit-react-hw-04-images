@@ -73,7 +73,8 @@ export const ImageGallery = ({ getSearchterm }) => {
       };
       getResults();
     }
-  }, [getSearchterm]); //react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getSearchterm]);
 
   useEffect(() => {
     if (page !== 1) {
@@ -98,7 +99,8 @@ export const ImageGallery = ({ getSearchterm }) => {
 
       getResults();
     }
-  }, [page]); //react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
   if (status === 'idle') {
     return;

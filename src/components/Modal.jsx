@@ -7,7 +7,8 @@ export const Modal = ({ closeModal, bigImage, onClose }) => {
         onClose();
       }
     });
-  }, []); //react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="Overlay" onClick={closeModal}>
